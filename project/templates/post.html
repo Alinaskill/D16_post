@@ -1,0 +1,43 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Post
+{% endblock title %}
+
+
+{% block content %}
+<h1>{{ post }}</h1>
+<h3>Категория: {{ post.category }}</h3>
+<h3>Автор: {{ post.author }}</h3>
+<h3><img src="{{ post.image.url }}"></h3>
+<h5>Дата последних изменений {{ post.updated }}</h5>
+
+<form action="{% url 'post_update' post.pk %}">
+    <input type="submit" value="Редактировать" />
+</form>
+
+<br>
+    <div>
+        <h2>Комментарии:</h2>
+            {% if comments %}
+                {% for comment in comments %}
+                    <h2>{{ comment.author }}</h2>
+                    <p>{{ comment.text }}</p>
+                {% endfor %}
+            {% else %}
+                <h3>Комментариев нет.</h3>
+            {% endif %}
+        <br>
+            <h3>Добавить комментарий:</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Добавить комментарий</button>
+            </form>
+    </div>
+
+
+
+{% endblock content %}
